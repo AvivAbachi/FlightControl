@@ -1,8 +1,8 @@
 ﻿namespace FlightControl.Models
 {
-    public struct Point
+    public class Point
     {
-        public double X;
-        public double Y;
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }

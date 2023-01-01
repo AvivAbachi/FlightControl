@@ -3,7 +3,7 @@
     public enum Target
     {
         Default,
-        TeminalA,
-        TeminalB,
+        TerminalA,
+        TerminalB,
     }
 }

@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AuthGuard } from './guard/auth.guard';
+import { AuthService } from './services/auth.service';
+import { FlightsService } from './services/flights.service';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -13,8 +15,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { FlightDisplayComponent } from './components/flight-display/flight-display.component';
-import { AuthService } from './services/auth.service';
+import { FlightListComponent } from './components/flight-list/flight-list.component';
+import { AirportMapComponent } from './components/airport-map/airport-map.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { AuthService } from './services/auth.service';
     RegisterComponent,
     AdminComponent,
     NavbarComponent,
-    FlightDisplayComponent,
+    FlightListComponent,
+    AirportMapComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,7 @@ import { AuthService } from './services/auth.service';
     ReactiveFormsModule,
     AppRoutingModule,
   ],
-  providers: [AuthGuard, AuthService],
+  providers: [AuthGuard, AuthService, FlightsService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

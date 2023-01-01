@@ -30,20 +30,24 @@ namespace FlightControl.Api.Controllers
         public async Task<ActionResult> GetUser()
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(id);
-            return Ok(user);
+            if (id != null)
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                return Ok(user);
+            }
+            return Unauthorized();
         }
 
         [HttpPost("Login")]
         public async Task<ActionResult<ApplicationUser>> Login([FromBody] UserForm userForm)
         {
             var user = await _userManager.FindByNameAsync(userForm.Username);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, userForm.Password))
+            if (user != null && await _userManager.CheckPasswordAsync(user, userForm.Password))
             {
-                return Unauthorized(new AuthResponse { ErrorMessage = "Invalid Authentication" });
+                var token = _jwtHandler.GenerateTokenOptions(user);
+                return Ok(new AuthResponse { Token = token });
             }
-            var token = _jwtHandler.GenerateTokenOptions(user);
-            return Ok(new AuthResponse { IsAuthSuccessful = true, Token = token });
+            return Unauthorized();
         }
 
         [HttpPost("register")]
@@ -57,7 +61,7 @@ namespace FlightControl.Api.Controllers
             if (!result.Succeeded) return BadRequest(result);
 
             var token = _jwtHandler.GenerateTokenOptions(user);
-            return Ok(new AuthResponse { IsAuthSuccessful = true, Token = token });
+            return Ok(new AuthResponse { Token = token });
         }
 
         [Authorize]
@@ -65,15 +69,16 @@ namespace FlightControl.Api.Controllers
         public async Task<ActionResult> RefreshToken()
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(id);
-
-            if (user == null)
+            if (id != null)
             {
-                return Unauthorized(new AuthResponse { ErrorMessage = "Invalid Authentication" });
+                var user = await _userManager.FindByIdAsync(id);
+                if (user != null)
+                {
+                    var token = _jwtHandler.GenerateTokenOptions(user);
+                    return Ok(new AuthResponse { Token = token });
+                }
             }
-
-            var token = _jwtHandler.GenerateTokenOptions(user);
-            return Ok(new AuthResponse { IsAuthSuccessful = true, Token = token });
+            return Unauthorized();
         }
     }
 }

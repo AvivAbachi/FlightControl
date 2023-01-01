@@ -1,1 +1,16 @@
- 
+.map {
+  width: 750px;
+  /* width: 80%; */
+  margin: 0 auto;
+}
+
+.map line {
+  stroke: gray;
+  stroke-width: 32px;
+  stroke-linecap: square;
+  fill: none;
+}
+
+.map circle {
+  transition: all 5s;
+}

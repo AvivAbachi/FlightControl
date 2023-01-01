@@ -1,0 +1,45 @@
+<div class="map">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 350">
+    <defs>
+      <linearGradient id="gr" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color: gold" />
+        <stop offset="100%" style="stop-color: darkgoldenrod" />
+      </linearGradient>
+    </defs>
+    <!-- pre -->
+    <line x1="700" y1="50" x2="600" y2="50" />
+    <!-- ranaway -->
+    <line x1="600" y1="50" x2="150" y2="50" />
+    <!-- out ranaway -->
+    <line x1="150" y1="50" x2="150" y2="200" />
+    <!-- to terminals -->
+    <line x1="150" y1="200" x2="300" y2="200" />
+    <!-- to terminal a -->
+    <line x1="300" y1="200" x2="300" y2="300" />
+    <!-- terminal midway -->
+    <line x1="300" y1="200" x2="450" y2="200" />
+    <!-- terminal b -->
+    <line x1="450" y1="200" x2="450" y2="300" />
+    <!-- out terminals -->
+    <line x1="450" y1="200" x2="600" y2="200" />
+    <!-- to runaway -->
+    <line x1="600" y1="200" x2="600" y2="50" />
+    <!-- out -->
+    <line x1="150" y1="50" x2="50" y2="50" />
+    <g *ngFor="let st of data">
+      <circle
+        r="8"
+        [attr.cx]="st.flight!.location?.x"
+        [attr.cy]="st.flight!.location?.y"
+        fill="url(#gr)"
+      ></circle>
+      <text
+        [attr.x]="st.flight!.location?.x"
+        [attr.y]="st.flight!.location?.y"
+        [attr.text]="st.flight"
+      >
+        {{ st.flight?.id }}
+      </text>
+    </g>
+  </svg>
+</div>

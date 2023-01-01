@@ -1,27 +1,25 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FlightControl.Models
 {
     public class Station
     {
-        private readonly Action<object, Flight> OnUpdate;
-        public int Id { get; }
-        public string Name { get; }
-        public Flight? Flight { get; set; }
+        internal Action<object, Flight>? OnUpdate { get; set; }
 
-        public Station(int id, string name, Action<object, Flight> onUpdate)
-        {
-            Id = id;
-            Name = name;
-            OnUpdate = onUpdate;
-        }
-
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public virtual Flight? Flight { get; set; }
+        [NotMapped]
+        public Point Start { get; set; } = new Point();
+        [NotMapped]
+        public Point End { get; set; } = new Point();
+   
         internal void Enter(Flight flight)
         {
             flight.Station?.Exit();
             flight.Station = this;
             Flight = flight;
-            OnUpdate(this, flight);
+            OnUpdate?.Invoke(this, flight);
         }
 
         internal virtual void Exit()
