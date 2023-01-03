@@ -2,17 +2,17 @@
 {
     public class StationBuffer : Station
     {
-        private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim semaphore = new(1);
         internal new async Task Enter(Flight flight)
         {
             await semaphore.WaitAsync();
             base.Enter(flight);
         }
 
-        internal override void Exit()
+        internal override void Exit(Flight flight)
         {
             semaphore.Release();
-            base.Exit();
+            base.Exit(flight);
         }
     }
 }

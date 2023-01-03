@@ -12,5 +12,6 @@ namespace FlightControl.Api.Data
     {
         public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions) { }
         public DbSet<Flight> Flights { get; set; }
+        public DbSet<Station> Stations { get; set; }
     }
 }

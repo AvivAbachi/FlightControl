@@ -1,9 +1,6 @@
-﻿using FlightControl.Api.Data;
-using FlightControl.Api.Repository;
+﻿using FlightControl.Api.Repository;
 using FlightControl.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
 namespace FlightControl.Api.Controllers
 {
@@ -14,23 +11,16 @@ namespace FlightControl.Api.Controllers
         private readonly IAirportManager manager;
         private readonly IAirportRepository repository;
 
-        public AirportController(IAirportManager manager, IAirportRepository repository, IServiceScopeFactory serviceScopeFactory)
+        public AirportController(IAirportManager manager, IAirportRepository repository)
         {
             this.manager = manager;
             this.repository = repository;
-            manager.OnFlightUpdate += (s, e) =>
-            {
-                using var scope = serviceScopeFactory.CreateScope();
-                var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                //context?.Update(e.flight);
-                //context?.SaveChanges();
-            };
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Flight?>> Get()
+        public ActionResult Get()
         {
-            return Ok(new { Flights = manager.GetAllFlights(), Stations = manager.GetAllStations() });
+            return Ok(new { Flights = manager.GetAllFlights()});
         }
 
         [HttpPost]
@@ -45,6 +35,5 @@ namespace FlightControl.Api.Controllers
 
             return Ok();
         }
-
     }
 }

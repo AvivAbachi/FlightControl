@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { Station } from 'src/app/models/station';
+import { Flight } from 'src/app/models/flight';
 
 @Component({
   selector: 'app-airport-map',
   templateUrl: './airport-map.component.html',
 })
 export class AirportMapComponent {
-  @Input() data: Station[] = [];
+  @Input() data: Flight[] = [];
 }

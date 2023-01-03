@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Flight } from 'src/app/models/flight';
-import { Station } from 'src/app/models/station';
 import { FlightsService } from 'src/app/services/flights.service';
 
 @Component({
@@ -9,8 +8,8 @@ import { FlightsService } from 'src/app/services/flights.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   id?: NodeJS.Timer | number;
-  flightsList: Flight[] = [];
-  stationsList: Station[] = [];
+  list: Flight[] = [];
+  map: Flight[] = [];
 
   constructor(private flights: FlightsService) {
     this.flights.get();
@@ -20,12 +19,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.id = setInterval(() => {
       this.flights.get().subscribe({
         next: (res) => {
-          this.flightsList = res.flights;
-          this.stationsList = res.stations.filter((s) => s.flight != null);
+          this.list = res.flights;
+          this.map = res.flights.filter((f) => {
+            console.log(f);
+
+            return !(f.station!.stationId < 1 || f.station!.stationId > 11);
+          });
         },
         error: (err) => console.error(err),
       });
-    }, 1000);
+    }, 50);
   }
   ngOnDestroy() {
     if (this.id) {

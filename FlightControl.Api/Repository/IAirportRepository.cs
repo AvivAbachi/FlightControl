@@ -1,14 +1,13 @@
-﻿using FlightControl.Api.Data;
-using FlightControl.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using FlightControl.Models;
 
 namespace FlightControl.Api.Repository
 {
     public interface IAirportRepository
     {
+        void SetStations(IEnumerable<Station> stations);
         void AddFlight(Flight flight);
         Flight[] GetAllFlight();
         void RemoveFlight(Flight flight);
-        void UpdateFlight( Flight flight);
+        void UpdateFlight(Flight flight);
     }
 }

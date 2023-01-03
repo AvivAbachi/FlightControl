@@ -77,6 +77,21 @@ using (var scope = app.Services.CreateScope())
     ctx.Database.EnsureCreated();
 }
 
+var airport = app.Services.GetRequiredService<IAirportManager>();
+
+using (var scope = app.Services.CreateScope())
+{
+    var repositry = scope.ServiceProvider.GetRequiredService<IAirportRepository>();
+    repositry.SetStations(airport.GetAllStations());
+}
+
+airport.OnFlightUpdate += (s, e) =>
+{
+    using var scope = app.Services.CreateScope();
+    var repositry = scope.ServiceProvider.GetRequiredService<IAirportRepository>();
+    repositry.UpdateFlight(e.flight);
+};
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

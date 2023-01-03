@@ -10,7 +10,3 @@
   stroke-linecap: square;
   fill: none;
 }
-
-.map circle {
-  transition: all 5s;
-}

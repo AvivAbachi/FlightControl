@@ -1,15 +1,13 @@
 import { Station } from './station';
 
 export class Flight {
-  constructor(
-    public id: number,
-    public target: number,
-    public airline?: string,
-    public comeingForm?: string,
-    public departingTo?: string,
-    public arrivalDate?: Date,
-    public departureDate?: Date,
-    public location?: { x: number; y: number },
-    public station?: Station
-  ) {}
+  flightId: number = 0;
+  target: number = 0;
+  airline: string = '';
+  comeingForm: string = '';
+  departingTo: string = '';
+  location: { x: number; y: number } = { x: 0, y: 0 };
+  arrivalDate?: Date;
+  departureDate?: Date;
+  station?: Station;
 }

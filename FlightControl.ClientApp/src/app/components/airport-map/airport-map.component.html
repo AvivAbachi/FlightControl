@@ -26,19 +26,19 @@
     <line x1="600" y1="200" x2="600" y2="50" />
     <!-- out -->
     <line x1="150" y1="50" x2="50" y2="50" />
-    <g *ngFor="let st of data">
+    <g *ngFor="let flight of data">
       <circle
         r="8"
-        [attr.cx]="st.flight!.location?.x"
-        [attr.cy]="st.flight!.location?.y"
+        [attr.cx]="flight.location.x"
+        [attr.cy]="flight.location.y"
         fill="url(#gr)"
       ></circle>
       <text
-        [attr.x]="st.flight!.location?.x"
-        [attr.y]="st.flight!.location?.y"
-        [attr.text]="st.flight"
+        [attr.x]="flight.location.x"
+        [attr.y]="flight.location.y"
+        transform="translate(16, -8)"
       >
-        {{ st.flight?.id }}
+        {{ flight.flightId }}
       </text>
     </g>
   </svg>

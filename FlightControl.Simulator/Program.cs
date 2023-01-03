@@ -1,4 +1,6 @@
 ﻿using FlightControl.Models;
+using System.Numerics;
+using System.Runtime.Intrinsics;
 using System.Text;
 using System.Text.Json;
 
@@ -6,7 +8,7 @@ Random random = new();
 var Url = "https://localhost:5001/api/airport";
 
 var airlines = new string[] { "Qatar Airways", "Singapore Airlines", "Emirates", "ANA All Nippon Airways", "Qantas Airways", "Japan Airlines", "Turkish Airlines", "Air France", "Korean Air", "Swiss International Air Lines" };
-var cities = new string[] { "Paris", "Maui", "Tahiti", "London", "Rome", "Tokyo", "Maldives", "Barcelona", "New York", "Sydney", "Dubai", "Amsterdam", "Vancouver", "Prague" };
+var cities = new string[] { "Paris", "Maui", "London", "Rome", "Tokyo", "Maldives", "Barcelona", "New York", "Sydney", "Dubai", "Amsterdam", "Vancouver", "Prague" };
 
 while (true)
 {
@@ -32,11 +34,11 @@ while (true)
         }
         catch (Exception ex)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(ex.Message);
+            Console.ForegroundColor = ConsoleColor.Gray;
+
         }
         await Task.Delay(random.Next(1000, 8000));
     });
 }
-
-//using FlightControl.Simulator;
-//AirportDebug.Debug();

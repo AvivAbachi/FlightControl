@@ -1,6 +1,5 @@
 ﻿using FlightControl.Api.Data;
 using FlightControl.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace FlightControl.Api.Repository
 {
@@ -11,6 +10,12 @@ namespace FlightControl.Api.Repository
         public AirportRepository(ApplicationDbContext context)
         {
             this.context = context;
+        }
+
+        public void SetStations(IEnumerable<Station> stations)
+        {
+            context.Stations.AddRange(stations);
+            context.SaveChanges();
         }
 
         public void AddFlight(Flight flight)

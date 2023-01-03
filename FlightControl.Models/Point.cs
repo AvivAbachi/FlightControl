@@ -1,8 +1,33 @@
 ﻿namespace FlightControl.Models
 {
-    public class Point
+    public class Point : IEquatable<Point>
     {
         public int X { get; set; }
         public int Y { get; set; }
+
+        public bool Equals(Point? other)
+        {
+            return X == other?.X && Y == other?.Y;
+        }
+
+        public void Step(Point target, int speed = 10)
+        {
+            if (X != target.X)
+            {
+                X = SetStep(X, target.X, speed);
+            }
+            if (Y != target.Y)
+            {
+                Y = SetStep(Y, target.Y, speed);
+            }
+        }
+        private static int SetStep(int value, int targetValue, int speed)
+        {
+            int delta = value - targetValue;
+            if (Math.Abs(delta) < speed) return targetValue;
+            else if (delta < 0) return value + speed;
+            else return value - speed;
+        }
     }
 }
+
