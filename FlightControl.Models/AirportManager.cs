@@ -26,76 +26,75 @@
                 Name = "Per Landing",
                 OnUpdate = FlightUpdate,
                 Start = new Point { X = 700, Y = 50 },
-                End = new Point { X = 600, Y = 50 }
+                End = new Point { X = 625, Y = 50 }
             };
             var Runaway = new StationBuffer
             {
                 Name = "Runaway",
                 OnUpdate = FlightUpdate,
-                Start = PerLanding.End,
+                Start = new Point { X = 600, Y = 50 },
                 End = new Point { X = 150, Y = 50 }
             };
             var OutRunaway = new StationBuffer
             {
                 Name = "Out Runaway",
                 OnUpdate = FlightUpdate,
-                Start = Runaway.End,
+                Start = new Point { X = 150, Y = 75 },
                 End = new Point { X = 150, Y = 200 }
             };
             var ToTerminals = new StationBuffer
             {
                 Name = "To Terminals",
                 OnUpdate = FlightUpdate,
-                Start = OutRunaway.End,
-                End = new Point { X = 300, Y = 200 }
+                Start = new Point { X = 150, Y = 200 },
+                End = new Point { X = 275, Y = 200 }
             };
             var TerminalA = new StationBuffer
             {
                 Name = "Terminal A",
                 OnUpdate = FlightUpdate,
-                Start = ToTerminals.End,
+                Start = new Point { X = 300, Y = 200 },
                 End = new Point { X = 300, Y = 300 }
             };
             var TerminalMidway = new StationBuffer
             {
                 Name = "Terminal Midway",
                 OnUpdate = FlightUpdate,
-                Start = ToTerminals.End,
-                End = new Point { X = 450, Y = 200 }
+                Start = new Point { X = 325, Y = 200 },
+                End = new Point { X = 425, Y = 200 }
             };
             var TerminalB = new StationBuffer
             {
                 Name = "Terminal B",
                 OnUpdate = FlightUpdate,
-                Start = TerminalMidway.End,
+                Start = new Point { X = 450, Y = 200 },
                 End = new Point { X = 450, Y = 300 }
             };
             var OutTerminals = new StationBuffer
             {
                 Name = "Out Terminals",
                 OnUpdate = FlightUpdate,
-                Start = TerminalMidway.End,
-                End = new Point { X = 600, Y = 200 }
+                Start = new Point { X = 475, Y = 200 },
+                End = new Point { X = 575, Y = 200 }
             };
             var ToRunaway = new StationBuffer
             {
                 Name = "To Runaway",
                 OnUpdate = FlightUpdate,
-                Start = OutTerminals.End,
-                End = Runaway.Start
+                Start = new Point { X = 600, Y = 200 },
+                End = new Point { X = 600, Y = 75 }
             };
             var Takeoff = new StationBuffer
             {
                 Name = "Takeoff",
                 OnUpdate = FlightUpdate,
-                Start = Runaway.End,
+                Start = new Point { X = 150, Y = 50 },
                 End = new Point { X = 50, Y = 50 }
             };
             var Out = new Station
             {
                 Name = "Out",
                 OnUpdate = FlightUpdate,
-                Start = Runaway.End,
             };
             all = new Station[] { Waiting, PerLanding, Runaway, OutRunaway, ToTerminals, TerminalA, TerminalMidway, TerminalB, OutTerminals, ToRunaway, Takeoff, Out };
             pathA = new Station[] { Waiting, PerLanding, Runaway, OutRunaway, ToTerminals, TerminalA, TerminalMidway, OutTerminals, ToRunaway, Runaway, Takeoff, Out };

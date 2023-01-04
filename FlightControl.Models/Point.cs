@@ -10,17 +10,16 @@
             return X == other?.X && Y == other?.Y;
         }
 
-        public void Step(Point target, int speed = 10)
+        public async Task Step(Point target, int speed, int delay)
         {
-            if (X != target.X)
+            while (!Equals(target))
             {
-                X = SetStep(X, target.X, speed);
-            }
-            if (Y != target.Y)
-            {
-                Y = SetStep(Y, target.Y, speed);
+                if (X != target.X) X = SetStep(X, target.X, speed);
+                if (Y != target.Y) Y = SetStep(Y, target.Y, speed);
+                await Task.Delay(delay);
             }
         }
+
         private static int SetStep(int value, int targetValue, int speed)
         {
             int delta = value - targetValue;

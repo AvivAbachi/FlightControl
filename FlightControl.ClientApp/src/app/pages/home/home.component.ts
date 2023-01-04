@@ -15,20 +15,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.flights.get();
   }
   ngOnInit(): void {
-    this.flights.get();
-    this.id = setInterval(() => {
-      this.flights.get().subscribe({
-        next: (res) => {
-          this.list = res.flights;
-          this.map = res.flights.filter((f) => {
-            console.log(f);
-
-            return !(f.station!.stationId < 1 || f.station!.stationId > 11);
-          });
-        },
-        error: (err) => console.error(err),
-      });
-    }, 50);
+    // this.id = setInterval(() => {
+    //   this.flights.get().subscribe({
+    //     next: (res) => {
+    //       this.list = res.flights;
+    //       this.map = res.flights.filter((f) => {
+    //         return !(f.station!.stationId < 1 || f.station!.stationId > 11);
+    //       });
+    //     },
+    //     error: (err) => console.error(err),
+    //   });
+    // }, 100);
   }
   ngOnDestroy() {
     if (this.id) {
