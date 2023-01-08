@@ -1,6 +1,4 @@
 ﻿using FlightControl.Models;
-using System.Numerics;
-using System.Runtime.Intrinsics;
 using System.Text;
 using System.Text.Json;
 
@@ -19,8 +17,8 @@ while (true)
         var flight = new Flight
         {
             Airline = airlines[random.Next(0, airlines.Length)],
-            ComeingForm = cities[random.Next(0, cities.Length)],
-            DepartingTo = cities[random.Next(0, cities.Length)],
+            Airport = cities[random.Next(0, cities.Length)],
+            //Target=Target.Arrival
             Target = (Target)random.Next(1, 3)
         };
         var json = JsonSerializer.Serialize(flight);
@@ -37,8 +35,7 @@ while (true)
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(ex.Message);
             Console.ForegroundColor = ConsoleColor.Gray;
-
         }
-        await Task.Delay(random.Next(1000, 8000));
+        await Task.Delay(random.Next(10, 2000));
     });
 }

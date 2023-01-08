@@ -3,7 +3,7 @@
     public enum Target
     {
         Default,
-        TerminalA,
-        TerminalB,
+        Arrival,
+        Departure
     }
 }

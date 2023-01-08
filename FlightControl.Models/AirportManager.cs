@@ -2,144 +2,66 @@
 {
     public class AirportManager : IAirportManager
     {
-        public static AirportManager GetInstance => instance;
-        private static readonly AirportManager instance = new();
-
         public event EventHandler<FlightsArgs> OnFlightUpdate;
 
-        private readonly SemaphoreSlim safeBuffer = new(1);
+        private readonly SemaphoreSlim safeBuffer = new(4);
         private readonly List<Flight> flights = new();
+        private readonly IAirportConfig config;
 
-        private readonly Station[] all;
-        private readonly Station[] pathA;
-        private readonly Station[] pathB;
+        #region Singelton
+        private static AirportManager? instance = null;
+        public static AirportManager GetInstance => instance ?? throw new InvalidOperationException("Airport Manager not created, use create method first!");
 
         private AirportManager()
         {
-            var Waiting = new Station
-            {
-                Name = "Waitng",
-                OnUpdate = FlightUpdate
-            };
-            var PerLanding = new StationBuffer
-            {
-                Name = "Per Landing",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 700, Y = 50 },
-                End = new Point { X = 625, Y = 50 }
-            };
-            var Runaway = new StationBuffer
-            {
-                Name = "Runaway",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 600, Y = 50 },
-                End = new Point { X = 150, Y = 50 }
-            };
-            var OutRunaway = new StationBuffer
-            {
-                Name = "Out Runaway",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 150, Y = 75 },
-                End = new Point { X = 150, Y = 200 }
-            };
-            var ToTerminals = new StationBuffer
-            {
-                Name = "To Terminals",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 150, Y = 200 },
-                End = new Point { X = 275, Y = 200 }
-            };
-            var TerminalA = new StationBuffer
-            {
-                Name = "Terminal A",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 300, Y = 200 },
-                End = new Point { X = 300, Y = 300 }
-            };
-            var TerminalMidway = new StationBuffer
-            {
-                Name = "Terminal Midway",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 325, Y = 200 },
-                End = new Point { X = 425, Y = 200 }
-            };
-            var TerminalB = new StationBuffer
-            {
-                Name = "Terminal B",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 450, Y = 200 },
-                End = new Point { X = 450, Y = 300 }
-            };
-            var OutTerminals = new StationBuffer
-            {
-                Name = "Out Terminals",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 475, Y = 200 },
-                End = new Point { X = 575, Y = 200 }
-            };
-            var ToRunaway = new StationBuffer
-            {
-                Name = "To Runaway",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 600, Y = 200 },
-                End = new Point { X = 600, Y = 75 }
-            };
-            var Takeoff = new StationBuffer
-            {
-                Name = "Takeoff",
-                OnUpdate = FlightUpdate,
-                Start = new Point { X = 150, Y = 50 },
-                End = new Point { X = 50, Y = 50 }
-            };
-            var Out = new Station
-            {
-                Name = "Out",
-                OnUpdate = FlightUpdate,
-            };
-            all = new Station[] { Waiting, PerLanding, Runaway, OutRunaway, ToTerminals, TerminalA, TerminalMidway, TerminalB, OutTerminals, ToRunaway, Takeoff, Out };
-            pathA = new Station[] { Waiting, PerLanding, Runaway, OutRunaway, ToTerminals, TerminalA, TerminalMidway, OutTerminals, ToRunaway, Runaway, Takeoff, Out };
-            pathB = new Station[] { Waiting, PerLanding, Runaway, OutRunaway, ToTerminals, TerminalMidway, TerminalB, OutTerminals, ToRunaway, Runaway, Takeoff, Out };
+            throw new InvalidOperationException("Airport Manager not created, use create method first!");
         }
+        private AirportManager(IAirportConfig config)
+        {
+            this.config = config;
+            for (int i = 0; i < this.config.Stations.Length; i++)
+            {
+                this.config.Stations[i].OnUpdate = FlightUpdate;
+            }
+        }
+
+        public static AirportManager Create(IAirportConfig config)
+        {
+            if (instance != null) throw new InvalidOperationException("Airport Manager was created, use GetInstance");
+            instance = new AirportManager(config);
+            return GetInstance;
+        }
+        #endregion
 
         public async Task AddFlight(Flight flight)
         {
-            var path = GetPath(flight.Target);
+            var path = config.GetPath(flight);
             if (path == null) throw new ArgumentNullException("Target is not vaild", nameof(flight.Target));
             flights.Add(flight);
-            await flight.ProseecePlan(path, safeBuffer);
-            await Task.Delay(5000);
-            flights.Remove(flight);
-        }
-
-        private Station[]? GetPath(Target target)
-        {
-            if (target == Target.TerminalA) return pathA;
-            if (target == Target.TerminalB) return pathB;
-            return null;
+            flight.Station = new Station { Name = "Wait" };
+            await safeBuffer.WaitAsync();
+            if (flight.Target == Target.Departure) await flight.EnterToTerminal(config.Terminals);
+            await flight.ProseecePlan(path);
+            if (flight.Target == Target.Arrival) await flight.EnterToTerminal(config.Terminals);
+            safeBuffer.Release();
+            flight.Station!.Exit(flight);
+            flight.Station = new Station { Name = "Done" };
+            //flights.Remove(flight);
         }
 
         public IEnumerable<Station> GetAllStations()
         {
-            return all;
+            return config.Stations;
         }
 
-        public IEnumerable<Flight?> GetAllFlights()
+        public IEnumerable<Flight> GetAllFlights()
         {
             return flights;
         }
 
-        private void FlightUpdate(object sender, Flight flight)
+        private void FlightUpdate(Flight flight)
         {
-            OnFlightUpdate?.DynamicInvoke(sender, new FlightsArgs(flight));
-        }
-    }
-
-    public class FlightsArgs : EventArgs
-    {
-        public Flight flight;
-        public FlightsArgs(Flight flight)
-        {
-            this.flight = flight;
+            OnFlightUpdate.DynamicInvoke(this, new FlightsArgs(flight));
         }
     }
 }

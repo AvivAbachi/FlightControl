@@ -10,6 +10,12 @@
             return X == other?.X && Y == other?.Y;
         }
 
+        public void Set(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
         public async Task Step(Point target, int speed, int delay)
         {
             while (!Equals(target))

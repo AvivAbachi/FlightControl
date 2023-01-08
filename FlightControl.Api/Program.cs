@@ -1,3 +1,4 @@
+using FlightControl.Api;
 using FlightControl.Api.Data;
 using FlightControl.Api.Models;
 using FlightControl.Api.Repository;
@@ -15,13 +16,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var airportConfig = new AirportConfig();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
-builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
@@ -39,7 +40,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddScoped<JwtHandler>();
 builder.Services.AddScoped<IAirportRepository, AirportRepository>();
-builder.Services.AddSingleton<IAirportManager>(AirportManager.GetInstance);
+builder.Services.AddSingleton<IAirportManager>(AirportManager.Create(airportConfig));
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
@@ -72,25 +73,21 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    var airport = app.Services.GetRequiredService<IAirportManager>();
     var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
     ctx.Database.EnsureDeleted();
     ctx.Database.EnsureCreated();
+    ctx.Stations.AddRange(airport.GetAllStations());
+    ctx.SaveChanges();
+
+    airport.OnFlightUpdate += (s, e) =>
+    {
+        using var scope = app.Services.CreateScope();
+        var repositry = scope.ServiceProvider.GetRequiredService<IAirportRepository>();
+        repositry.UpdateFlight(e.flight);
+    };
 }
-
-var airport = app.Services.GetRequiredService<IAirportManager>();
-
-using (var scope = app.Services.CreateScope())
-{
-    var repositry = scope.ServiceProvider.GetRequiredService<IAirportRepository>();
-    repositry.SetStations(airport.GetAllStations());
-}
-
-airport.OnFlightUpdate += (s, e) =>
-{
-    using var scope = app.Services.CreateScope();
-    var repositry = scope.ServiceProvider.GetRequiredService<IAirportRepository>();
-    repositry.UpdateFlight(e.flight);
-};
 
 if (app.Environment.IsDevelopment())
 {
