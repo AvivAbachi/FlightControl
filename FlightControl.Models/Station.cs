@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace FlightControl.Models
 {
@@ -13,30 +14,28 @@ namespace FlightControl.Models
         public string? Name { get; set; }
         public virtual List<Flight> Flights { get; set; } = new();
         [NotMapped]
-        public Point Start { get; set; }
-        [NotMapped]
-        public Point End { get; set; }
+        [JsonIgnore]
+        public Point Location { get; set; } = new();
 
-        internal async Task Enter(Flight flight, CancellationToken cancellationToken = default)
+        internal void Enter(Flight flight)
         {
-            await semaphore.WaitAsync(cancellationToken);
             flight.Station?.Exit(flight);
             flight.Station = this;
+            flight.Location?.Set(Location);
             Flights.Add(flight);
             OnUpdate?.Invoke(flight);
+        }
+
+        internal async Task EnterAsync(Flight flight, CancellationToken cancellationToken = default)
+        {
+            await semaphore.WaitAsync(cancellationToken);
+            Enter(flight);
         }
 
         internal virtual void Exit(Flight flight)
         {
             semaphore.Release();
             Flights.Remove(flight);
-        }
-
-        internal async Task Block()
-        {
-            await semaphore.WaitAsync();
-            await Task.Delay(1000);
-            semaphore.Release();
         }
     }
 }

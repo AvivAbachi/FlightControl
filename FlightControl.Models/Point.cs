@@ -16,6 +16,12 @@
             Y = y;
         }
 
+        public void Set(Point target)
+        {
+            X = target.X;
+            Y = target.Y;
+        }
+
         public async Task Step(Point target, int speed, int delay)
         {
             while (!Equals(target))

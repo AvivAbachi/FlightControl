@@ -18,8 +18,9 @@ while (true)
         {
             Airline = airlines[random.Next(0, airlines.Length)],
             Airport = cities[random.Next(0, cities.Length)],
-            //Target=Target.Arrival
             Target = (Target)random.Next(1, 3)
+            //Target=Target.Departure
+            //Target=Target.Arrival
         };
         var json = JsonSerializer.Serialize(flight);
         try

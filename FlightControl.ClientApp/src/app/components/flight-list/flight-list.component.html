@@ -1,21 +1,46 @@
-<table class="table align-middle mb-0 bg-white table-striped">
-  <thead class="bg-light">
-    <tr class="table-dark">
-      <th>Id</th>
-      <th>Airline</th>
-      <th>Comeing From</th>
-      <th>Terminal</th>
-      <!-- <th>Departing To</th> -->
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let flight of data">
-      <td>{{ flight?.flightId }}</td>
-      <td>{{ flight?.airline }}</td>
-      <td>{{ flight?.airport }}</td>
-      <td>{{ flight?.target == 1 ? "A" : "D" }}</td>
-      <td>{{ flight?.station?.name }}</td>
-    </tr>
-  </tbody>
+<table mat-table [dataSource]="data">
+  <!-- Position Column -->
+  <ng-container matColumnDef="flightId">
+    <th mat-header-cell *matHeaderCellDef>No.</th>
+    <td mat-cell *matCellDef="let flight">{{ flight.flightId }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="airline">
+    <th mat-header-cell *matHeaderCellDef>Airline</th>
+    <td mat-cell *matCellDef="let flight">{{ flight.airline }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let flight">{{ flight.station.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="landing">
+    <th mat-header-cell *matHeaderCellDef>Landing Time</th>
+    <td mat-cell *matCellDef="let flight">{{ flight.landingDate }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="arrival">
+    <th mat-header-cell *matHeaderCellDef>Arrival Time</th>
+    <td mat-cell *matCellDef="let flight">{{ flight.arrivalDate }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="boarding">
+    <th mat-header-cell *matHeaderCellDef>Boarding Time</th>
+    <td mat-cell *matCellDef="let flight">{{ flight.boardingDate }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="departure">
+    <th mat-header-cell *matHeaderCellDef>Departure Time</th>
+    <td mat-cell *matCellDef="let flight">{{ flight.departureDate }}</td>
+  </ng-container>
+
+  <tr
+    mat-header-row
+    *matHeaderRowDef="isDeparture ? departure : arrival; sticky: true"
+  ></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: isDeparture ? departure : arrival"
+  ></tr>
 </table>

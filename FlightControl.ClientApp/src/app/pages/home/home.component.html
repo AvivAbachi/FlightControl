@@ -1,2 +1,9 @@
 <app-airport-map [data]="map"></app-airport-map>
-<app-flight-list [data]="list"></app-flight-list>
+<mat-tab-group>
+  <mat-tab label="Arrivals">
+    <app-flight-list [data]="list"></app-flight-list>
+  </mat-tab>
+  <mat-tab label="Departures">
+    <app-flight-list [data]="list" [isDeparture]="true"></app-flight-list>
+  </mat-tab>
+</mat-tab-group>

@@ -4,6 +4,6 @@
     {
         public  Station[] Stations { get; }
         public  Station[] Terminals { get; }
-        public  Station[] GetPath(Flight flight);
+        public  Station[]? GetPath(Flight flight);
     }
 }
