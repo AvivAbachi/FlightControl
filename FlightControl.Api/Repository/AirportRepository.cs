@@ -1,5 +1,7 @@
-﻿using FlightControl.Api.Data;
+﻿using Duende.IdentityServer.Models;
+using FlightControl.Api.Data;
 using FlightControl.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlightControl.Api.Repository
 {
@@ -36,9 +38,10 @@ namespace FlightControl.Api.Repository
             context?.SaveChanges();
         }
 
-        public Flight[] GetAllFlight()
+        public IEnumerable<Flight> GetAllFlights(Target target)
         {
-            return context.Flights.ToArray();
+            return context.Flights.Where(f => f.Target == target).Include(f => f.Station)
+;
         }
     }
 }

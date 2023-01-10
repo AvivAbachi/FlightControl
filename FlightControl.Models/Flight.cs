@@ -17,8 +17,6 @@ namespace FlightControl.Models
         public DateTime? ArrivalDate { get; set; }
         public DateTime? BoardingDate { get; set; }
         public DateTime? DepartureDate { get; set; }
-
-        [NotMapped]
         public Target Target { get; set; }
         [NotMapped]
         public Point Location { get; set; } = new();

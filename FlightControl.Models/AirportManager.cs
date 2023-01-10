@@ -5,7 +5,6 @@
         public event EventHandler<FlightsArgs> OnFlightUpdate;
 
         private readonly SemaphoreSlim safeBuffer = new(4);
-        private readonly List<Flight> flights = new();
         private readonly IAirportConfig config;
 
         private static Station wait;
@@ -41,24 +40,16 @@
         public async Task AddFlight(Flight flight)
         {
             var path = config.GetPath(flight) ?? throw new ArgumentNullException("Target is not vaild", nameof(flight.Target));
-            flights.Add(flight);
             wait.Enter(flight);
             await safeBuffer.WaitAsync();
             await flight.ProseecePlan(path, config.Terminals);
             done.Enter(flight);
             safeBuffer.Release();
-            //await Task.Delay(1000);
-            //flights.Remove(flight);
         }
 
         public IEnumerable<Station> GetAllStations()
         {
             return config.Stations;
-        }
-
-        public IEnumerable<Flight> GetAllFlights()
-        {
-            return flights;
         }
 
         private void FlightUpdate(Flight flight)

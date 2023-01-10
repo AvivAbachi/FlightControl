@@ -20,13 +20,13 @@ namespace FlightControl.Api.Controllers
         [HttpGet("Arrival")]
         public ActionResult GetArrival()
         {
-            return Ok(new { Flights = manager.GetAllFlights().Where(f => f?.Target == Target.Arrival),Map=manager.GetAllStations().SelectMany(st=>st.Flights) });
+            return Ok(new { Flights = repository.GetAllFlights(Target.Arrival), Map = manager.GetAllStations().SelectMany(st => st.Flights) });
         }
 
         [HttpGet("Departure")]
         public ActionResult GetDeparture()
         {
-            return Ok(new { Flights = manager.GetAllFlights().Where(f => f?.Target == Target.Departure), Map = manager.GetAllStations().SelectMany(st => st.Flights) });
+            return Ok(new { Flights = repository.GetAllFlights(Target.Departure), Map = manager.GetAllStations().SelectMany(st => st.Flights) });
         }
 
 

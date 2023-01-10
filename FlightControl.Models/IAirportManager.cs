@@ -6,6 +6,5 @@
 
         Task AddFlight(Flight flight);
         IEnumerable<Station> GetAllStations();
-        IEnumerable<Flight?> GetAllFlights();
     }
 }

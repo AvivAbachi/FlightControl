@@ -6,7 +6,7 @@ namespace FlightControl.Api.Repository
     {
         void SetStations(IEnumerable<Station> stations);
         void AddFlight(Flight flight);
-        Flight[] GetAllFlight();
+        IEnumerable<Flight> GetAllFlights(Target target);
         void RemoveFlight(Flight flight);
         void UpdateFlight(Flight flight);
     }
