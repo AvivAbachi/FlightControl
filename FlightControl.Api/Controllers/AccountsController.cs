@@ -26,7 +26,7 @@ namespace FlightControl.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("user")]
+        [HttpGet("User")]
         public async Task<ActionResult> GetUser()
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -50,7 +50,7 @@ namespace FlightControl.Api.Controllers
             return Unauthorized();
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] UserForm userForm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -65,7 +65,7 @@ namespace FlightControl.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("refresh")]
+        [HttpGet("Refresh")]
         public async Task<ActionResult> RefreshToken()
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -15,13 +15,13 @@ namespace FlightControl.Models
         public virtual List<Flight> Flights { get; set; } = new();
         [NotMapped]
         [JsonIgnore]
-        public Point Location { get; set; } = new();
+        public Point? Location { get; set; }
 
         internal void Enter(Flight flight)
         {
             flight.Station?.Exit(flight);
             flight.Station = this;
-            flight.Location?.Set(Location);
+            if (Location != null) flight.Location.Set(Location);
             Flights.Add(flight);
             OnUpdate?.Invoke(flight);
         }

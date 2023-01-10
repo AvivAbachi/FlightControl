@@ -21,7 +21,7 @@ namespace FlightControl.Models
         [NotMapped]
         public Target Target { get; set; }
         [NotMapped]
-        public Point? Location { get; set; } = new();
+        public Point Location { get; set; } = new();
 
         internal async Task ProseecePlan(Station[] path, Station[] terminals)
         {
@@ -32,7 +32,7 @@ namespace FlightControl.Models
                {
                    if (station.StationId == 5) LandingDate = DateTime.Now;
                    await station.EnterAsync(this);
-                   await Task.Delay(1000);
+                   await Task.Delay(random.Value!.Next(1000,5000));
                }
                if (Target == Target.Arrival) await EnterToTerminal(terminals);
                if (Target == Target.Departure) DepartureDate = DateTime.Now;
@@ -46,7 +46,7 @@ namespace FlightControl.Models
             token.Cancel();
             if (Target == Target.Departure) BoardingDate = DateTime.Now;
             if (Target == Target.Arrival) ArrivalDate = DateTime.Now;
-            await Task.Delay(2000);
+            await Task.Delay(random.Value!.Next(5000, 7500));
         }
     }
 }

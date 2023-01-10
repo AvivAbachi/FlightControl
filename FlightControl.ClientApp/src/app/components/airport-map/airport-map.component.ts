@@ -7,4 +7,12 @@ import { Flight } from 'src/app/models/flight';
 })
 export class AirportMapComponent {
   @Input() data: Flight[] = [];
+  // constructor() {
+  //   const f = new Flight();
+  //   f.flightId = 2;
+  //   f.location.x = 565;
+  //   f.location.y = 215;
+  //   f.location.r = 130;
+  //   this.data = [f];
+  // }
 }

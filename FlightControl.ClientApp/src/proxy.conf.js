@@ -1,6 +1,6 @@
 const PROXY_CONFIG = [
   {
-    context: ["/api/*", "/api/Accounts/*"],
+    context: ["/Api/Airport/*", "/Api/Accounts/*"],
     target: "https://localhost:5001/",
     secure: false,
     changeOrigin: true,

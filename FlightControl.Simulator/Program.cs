@@ -18,9 +18,7 @@ while (true)
         {
             Airline = airlines[random.Next(0, airlines.Length)],
             Airport = cities[random.Next(0, cities.Length)],
-            Target = (Target)random.Next(1, 3)
-            //Target=Target.Departure
-            //Target=Target.Arrival
+            Target = (Target)random.Next(1, 3) 
         };
         var json = JsonSerializer.Serialize(flight);
         try
@@ -37,6 +35,6 @@ while (true)
             Console.WriteLine(ex.Message);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
-        await Task.Delay(random.Next(10, 2000));
+        await Task.Delay(random.Next(1000, 5000));
     });
 }

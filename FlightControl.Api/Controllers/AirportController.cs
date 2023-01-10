@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlightControl.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class AirportController : ControllerBase
     {
@@ -17,11 +17,18 @@ namespace FlightControl.Api.Controllers
             this.repository = repository;
         }
 
-        [HttpGet]
-        public ActionResult Get()
+        [HttpGet("Arrival")]
+        public ActionResult GetArrival()
         {
-            return Ok(new { Flights = manager.GetAllFlights()});
+            return Ok(new { Flights = manager.GetAllFlights().Where(f => f?.Target == Target.Arrival),Map=manager.GetAllStations().SelectMany(st=>st.Flights) });
         }
+
+        [HttpGet("Departure")]
+        public ActionResult GetDeparture()
+        {
+            return Ok(new { Flights = manager.GetAllFlights().Where(f => f?.Target == Target.Departure), Map = manager.GetAllStations().SelectMany(st => st.Flights) });
+        }
+
 
         [HttpPost]
         public ActionResult Post([FromBody] Flight flight)

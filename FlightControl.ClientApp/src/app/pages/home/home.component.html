@@ -1,9 +1,6 @@
 <app-airport-map [data]="map"></app-airport-map>
-<mat-tab-group>
-  <mat-tab label="Arrivals">
-    <app-flight-list [data]="list"></app-flight-list>
-  </mat-tab>
-  <mat-tab label="Departures">
-    <app-flight-list [data]="list" [isDeparture]="true"></app-flight-list>
-  </mat-tab>
+<mat-tab-group (selectedTabChange)="handelTabChange($event)">
+  <mat-tab label="Arrivals"></mat-tab>
+  <mat-tab label="Departures"></mat-tab>
 </mat-tab-group>
+<app-flight-list [data]="list" [isDeparture]="departure"></app-flight-list>

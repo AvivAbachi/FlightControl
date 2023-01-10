@@ -17,22 +17,30 @@
 
   <ng-container matColumnDef="landing">
     <th mat-header-cell *matHeaderCellDef>Landing Time</th>
-    <td mat-cell *matCellDef="let flight">{{ flight.landingDate }}</td>
+    <td mat-cell *matCellDef="let flight">
+      {{ flight.landingDate | date : "hh:mm:ss" }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="arrival">
     <th mat-header-cell *matHeaderCellDef>Arrival Time</th>
-    <td mat-cell *matCellDef="let flight">{{ flight.arrivalDate }}</td>
+    <td mat-cell *matCellDef="let flight">
+      {{ flight.arrivalDate | date : "hh:mm:ss" }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="boarding">
     <th mat-header-cell *matHeaderCellDef>Boarding Time</th>
-    <td mat-cell *matCellDef="let flight">{{ flight.boardingDate }}</td>
+    <td mat-cell *matCellDef="let flight">
+      {{ flight.boardingDate | date : "hh:mm:ss" }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="departure">
     <th mat-header-cell *matHeaderCellDef>Departure Time</th>
-    <td mat-cell *matCellDef="let flight">{{ flight.departureDate }}</td>
+    <td mat-cell *matCellDef="let flight">
+      {{ flight.departureDate | date : "hh:mm:ss" }}
+    </td>
   </ng-container>
 
   <tr

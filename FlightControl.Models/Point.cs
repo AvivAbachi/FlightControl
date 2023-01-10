@@ -4,22 +4,23 @@
     {
         public int X { get; set; }
         public int Y { get; set; }
+        public int R { get; set; }
 
         public bool Equals(Point? other)
         {
             return X == other?.X && Y == other?.Y;
         }
 
-        public void Set(int x, int y)
+        public void Set(int x, int y,int r)
         {
             X = x;
             Y = y;
+            R = r;
         }
 
         public void Set(Point target)
         {
-            X = target.X;
-            Y = target.Y;
+            Set(target.X, target.Y, target.R);
         }
 
         public async Task Step(Point target, int speed, int delay)

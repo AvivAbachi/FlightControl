@@ -23,7 +23,7 @@ export class AuthService {
 
   public register(user: User) {
     return this.http
-      .post<Token>('/api/Accounts/register', user)
+      .post<Token>('/Api/Accounts/Register', user)
       .subscribe((res) => {
         if (res.token) {
           localStorage.setItem('access_token', res.token);
@@ -35,7 +35,7 @@ export class AuthService {
 
   public login(user: User) {
     return this.http
-      .post<Token>('/api/Accounts/login', user)
+      .post<Token>('/Api/Accounts/Login', user)
       .subscribe((res) => {
         if (res.token) {
           localStorage.setItem('access_token', res.token);
@@ -53,7 +53,7 @@ export class AuthService {
 
   public refreshToken(token: string) {
     this.http
-      .get<Token>('/api/Accounts/refresh', {
+      .get<Token>('/Api/Accounts/Refresh', {
         headers: { Authorization: 'bearer ' + token },
       })
       .subscribe({
