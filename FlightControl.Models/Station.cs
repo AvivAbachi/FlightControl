@@ -25,10 +25,16 @@ namespace FlightControl.Models
             Flights.Add(flight);
             OnUpdate?.Invoke(flight);
         }
-
-        internal async Task EnterAsync(Flight flight, CancellationToken cancellationToken = default)
+        internal async Task EnterAsync(Flight flight)
         {
-            await semaphore.WaitAsync(cancellationToken);
+            await semaphore.WaitAsync();
+            Enter(flight);
+        }
+
+        internal async Task EnterAsync(Flight flight, CancellationTokenSource cancellationToken)
+        {
+            await semaphore.WaitAsync(cancellationToken.Token);
+            cancellationToken?.Cancel();
             Enter(flight);
         }
 

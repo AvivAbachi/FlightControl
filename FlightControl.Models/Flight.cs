@@ -26,11 +26,11 @@ namespace FlightControl.Models
             await Task.Run(async () =>
            {
                if (Target == Target.Departure) await EnterToTerminal(terminals);
-               foreach (Station station in path)
+               foreach (Station nextStation in path)
                {
-                   if (station.StationId == 5) LandingDate = DateTime.Now;
-                   await station.EnterAsync(this);
-                   await Task.Delay(random.Value!.Next(1000,5000));
+                   if (nextStation.StationId == 5) LandingDate = DateTime.Now;
+                   await nextStation.EnterAsync(this);
+                   await Task.Delay(random.Value!.Next(1000, 5000));
                }
                if (Target == Target.Arrival) await EnterToTerminal(terminals);
                if (Target == Target.Departure) DepartureDate = DateTime.Now;
@@ -39,9 +39,8 @@ namespace FlightControl.Models
 
         private async Task EnterToTerminal(Station[] terminals)
         {
-            var token = new CancellationTokenSource();
-            await Task.WhenAny(terminals.Select(async (t, i) => await t.EnterAsync(this, token.Token)));
-            token.Cancel();
+            var cancellationToken = new CancellationTokenSource();
+            await Task.WhenAny(terminals.Select(async (t, i) => await t.EnterAsync(this, cancellationToken)));
             if (Target == Target.Departure) BoardingDate = DateTime.Now;
             if (Target == Target.Arrival) ArrivalDate = DateTime.Now;
             await Task.Delay(random.Value!.Next(5000, 7500));
